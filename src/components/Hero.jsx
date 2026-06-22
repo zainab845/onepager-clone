@@ -61,10 +61,10 @@ const Hero = () => {
         </div>
       ))}
 
-      {/* SVG Left Arrow (Matching exact style from image) */}
+      {/* SVG Left Arrow - Pushed closer to the edge on mobile */}
       <button
         onClick={goPrev}
-        className="absolute left-4 sm:left-10 top-1/2 -translate-y-1/2 z-20 text-white hover:text-teal-400 transition-colors duration-200 cursor-pointer p-2 md:p-4"
+        className="absolute left-1 sm:left-10 top-1/2 -translate-y-1/2 z-20 text-white hover:text-teal-400 transition-colors duration-200 cursor-pointer p-1 md:p-4"
         aria-label="Previous slide"
       >
         <svg className="w-8 h-8 md:w-10 md:h-10" fill="currentColor" viewBox="0 0 24 24">
@@ -72,10 +72,10 @@ const Hero = () => {
         </svg>
       </button>
 
-      {/* SVG Right Arrow (Matching exact style from image) */}
+      {/* SVG Right Arrow - Pushed closer to the edge on mobile */}
       <button
         onClick={goNext}
-        className="absolute right-4 sm:right-10 top-1/2 -translate-y-1/2 z-20 text-white hover:text-teal-400 transition-colors duration-200 cursor-pointer p-2 md:p-4"
+        className="absolute right-1 sm:right-10 top-1/2 -translate-y-1/2 z-20 text-white hover:text-teal-400 transition-colors duration-200 cursor-pointer p-1 md:p-4"
         aria-label="Next slide"
       >
         <svg className="w-8 h-8 md:w-10 md:h-10" fill="currentColor" viewBox="0 0 24 24">
@@ -83,17 +83,17 @@ const Hero = () => {
         </svg>
       </button>
 
-      {/* Text Content */}
-      <div className="z-10 text-center px-4 sm:px-12 max-w-5xl mx-auto w-full">
-        {/* The Title ensures all words stay strictly inline with correct fonts */}
-        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[44px] tracking-widest mb-6 flex flex-wrap items-center justify-center whitespace-nowrap uppercase">
+      {/* Text Content - Increased side padding (px-16) so text avoids arrows on mobile */}
+      <div className="z-10 text-center px-16 sm:px-24 max-w-5xl mx-auto w-full">
+        {/* Title allows natural wrapping now */}
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[44px] tracking-widest mb-6 uppercase leading-tight md:leading-tight">
           <span className="font-serif font-bold text-white drop-shadow-md">
             {slides[currentSlide].titlePre}
           </span>
           <span className="font-serif font-bold text-teal-500 drop-shadow-md">
             {slides[currentSlide].titleTeal}
           </span>
-          <span className="font-mono font-normal text-white tracking-[0.15em] drop-shadow-md ml-3">
+          <span className="font-mono font-normal text-white tracking-[0.15em] drop-shadow-md">
             {slides[currentSlide].titlePost}
           </span>
         </h1>
