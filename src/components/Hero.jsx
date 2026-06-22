@@ -10,7 +10,7 @@ const slides = [
   },
   {
     bg: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1920",
-    titlePre: "WE ARE A",
+    titlePre: "WE ARE A ",
     titleTeal: "GREAT",
     titlePost: "COMPANY",
     sub: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore.",
@@ -18,7 +18,7 @@ const slides = [
   {
     bg:  "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1920",
     titlePre: "ONEPAGER ",
-    titleTeal: "IS",
+    titleTeal: "IS ",
     titlePost: "VERY SUITABLE",
     sub: "Duis aute irure dolor in reprehenderit in voluptate velit esse, consectetur adipisicing elit, sed do eiusmod.",
   },
@@ -40,77 +40,68 @@ const Hero = () => {
   return (
     <section
       id="home"
-      className="relative text-white flex flex-col justify-center items-center overflow-hidden"
-      style={{ minHeight: "100vh" }}
+      className="bg-[#282b30] text-white h-screen w-full flex flex-col justify-center items-center relative overflow-hidden"
     >
       {/* Background Slides */}
       {slides.map((slide, index) => (
         <div
           key={index}
-          className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentSlide ? "opacity-100" : "opacity-0"}`}
+          className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+            index === currentSlide ? "opacity-100 z-0" : "opacity-0 z-0"
+          }`}
         >
-          <div className="absolute inset-0 bg-slate-900/72 z-10" />
+      
+          <div className="absolute inset-0 bg-[#282b30]/90 z-10" />
           <img
             src={slide.bg}
-            alt=""
-            className="w-full h-full object-cover"
+            alt="Hero Background"
+            className="w-full h-full object-cover grayscale opacity-40"
             loading={index === 0 ? "eager" : "lazy"}
           />
         </div>
       ))}
 
-      {/* Left Arrow */}
+
       <button
         onClick={goPrev}
-        className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-20 text-white/40 hover:text-white text-4xl md:text-5xl transition-colors duration-200 leading-none select-none cursor-pointer"
+        className="absolute left-4 sm:left-10 top-1/2 -translate-y-1/2 z-20 text-white hover:text-teal-400 transition-colors duration-200 cursor-pointer p-2 md:p-4"
         aria-label="Previous slide"
       >
-        &#10094;
-      </button>
-
-      {/* Right Arrow */}
-      <button
-        onClick={goNext}
-        className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-20 text-white/40 hover:text-white text-4xl md:text-5xl transition-colors duration-200 leading-none select-none cursor-pointer"
-        aria-label="Next slide"
-      >
-        &#10095;
+        <svg className="w-8 h-8 md:w-10 md:h-10" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+        </svg>
       </button>
 
      
-      <div className="relative z-10 text-center px-6 sm:px-12 max-w-4xl mx-auto">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-widest mb-6 font-serif leading-tight uppercase">
-          {slides[currentSlide].titlePre}
-          <span className="text-teal-400">{slides[currentSlide].titleTeal}</span>{" "}
-          {slides[currentSlide].titlePost}
+      <button
+        onClick={goNext}
+        className="absolute right-4 sm:right-10 top-1/2 -translate-y-1/2 z-20 text-white hover:text-teal-400 transition-colors duration-200 cursor-pointer p-2 md:p-4"
+        aria-label="Next slide"
+      >
+        <svg className="w-8 h-8 md:w-10 md:h-10" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" />
+        </svg>
+      </button>
+
+      {/* Text Content */}
+      <div className="z-10 text-center px-4 sm:px-12 max-w-5xl mx-auto w-full">
+        {/* The Title ensures all words stay strictly inline with correct fonts */}
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[44px] tracking-widest mb-6 flex flex-wrap items-center justify-center whitespace-nowrap uppercase">
+          <span className="font-serif font-bold text-white drop-shadow-md">
+            {slides[currentSlide].titlePre}
+          </span>
+          <span className="font-serif font-bold text-teal-500 drop-shadow-md">
+            {slides[currentSlide].titleTeal}
+          </span>
+          <span className="font-mono font-normal text-white tracking-[0.15em] drop-shadow-md ml-3">
+            {slides[currentSlide].titlePost}
+          </span>
         </h1>
-        <p className="text-sm sm:text-base md:text-lg text-gray-300 mb-10 max-w-2xl mx-auto font-mono leading-relaxed">
+        
+        {/* Sub headline with exact spacing and breaks */}
+        <p className="text-white/80 font-mono text-xs sm:text-sm md:text-[15px] max-w-2xl mx-auto leading-[2.2] tracking-wider whitespace-pre-line drop-shadow-sm">
           {slides[currentSlide].sub}
         </p>
-       <a
-          href="#portfolio"
-          className="inline-block bg-teal-500 hover:bg-teal-400 transform -skew-x-[20deg] transition-colors duration-300 shadow-sm"
-        >
-          <span className="block transform skew-x-[20deg] text-white font-mono font-bold py-3 md:py-4 px-8 md:px-12 tracking-widest text-xs md:text-sm uppercase">
-            Learn More
-          </span>
-        </a>
-      </div>
-
-      
-      <div className="absolute bottom-8 left-0 right-0 z-20 flex justify-center gap-3">
-        {slides.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentSlide(index)}
-            aria-label={`Go to slide ${index + 1}`}
-            className={`w-3 h-3 rounded-full transition-all duration-300 cursor-pointer ${
-              index === currentSlide
-                ? "bg-teal-400 scale-110"
-                : "bg-white/30 hover:bg-white/60"
-            }`}
-          />
-        ))}
       </div>
     </section>
   );

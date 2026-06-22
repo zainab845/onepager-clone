@@ -17,10 +17,10 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-
+      // Add shadow if scrolled past 20px
       setScrolled(window.scrollY > 20);
 
-      // Detect which section is currently in view
+      // ScrollSpy Logic: Detect which section is currently in view
       const sectionElements = navLinks.map((link) => 
         document.getElementById(link.href.substring(1))
       );
@@ -29,7 +29,7 @@ const Navbar = () => {
       for (let i = sectionElements.length - 1; i >= 0; i--) {
         const section = sectionElements[i];
         if (section) {
-
+          // If we've scrolled past the top of the section (minus navbar offset)
           if (window.scrollY >= section.offsetTop - 150) {
             currentActive = section.id;
             break;
@@ -45,7 +45,7 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className={`bg-white sticky top-0 z-50 transition-shadow duration-300 ${scrolled ? "shadow-md" : "shadow-sm"}`}>
+    <nav className={`fixed w-full left-0 top-0 z-50 transition-all duration-500 ease-in-out ${scrolled ? "translate-y-0 opacity-100 bg-white shadow-md" : "-translate-y-full opacity-0 pointer-events-none"}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex justify-between items-center h-16 md:h-24">
 
@@ -59,7 +59,7 @@ const Navbar = () => {
               </span>
             </div>
             
-         
+            {/* Logo Text (Typewriter/Monospace font to match image) */}
             <div className="flex flex-col text-left leading-none mt-1">
               <span className="font-mono text-2xl tracking-[0.2em] text-slate-800 uppercase">
                 <span className="font-bold">ONE</span>
@@ -71,7 +71,7 @@ const Navbar = () => {
             </div>
           </a>
 
-      
+          {/* Desktop Nav */}
           <ul className="hidden md:flex items-center space-x-2 lg:space-x-4">
             {navLinks.map((link) => {
               const isActive = activeSection === link.href.substring(1);
@@ -83,14 +83,14 @@ const Navbar = () => {
                     onClick={() => setActiveSection(link.href.substring(1))}
                     className="relative inline-flex items-center justify-center px-5 py-2 group"
                   >
-                    
+                    {/* The Slanted Teal Box (Only visible when active) */}
                     <div 
                       className={`absolute inset-0 bg-teal-500 transform -skew-x-[20deg] transition-all duration-300 ${
                         isActive ? "opacity-100 scale-100" : "opacity-0 scale-95"
                       }`}
                     ></div>
                     
-                   
+                    {/* The Link Text */}
                     <span 
                       className={`relative z-10 font-mono text-[12px] uppercase tracking-widest transition-colors duration-200 ${
                         isActive ? "text-white font-bold" : "text-gray-500 group-hover:text-teal-500"
@@ -104,7 +104,7 @@ const Navbar = () => {
             })}
           </ul>
 
-      
+          {/* Hamburger (Mobile) */}
           <button
             className="md:hidden flex flex-col justify-center gap-[5px] w-8 h-8 cursor-pointer p-1"
             onClick={() => setMenuOpen(!menuOpen)}
@@ -117,7 +117,7 @@ const Navbar = () => {
         </div>
       </div>
 
-  
+      {/* Mobile Menu */}
       <div className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${menuOpen ? "max-h-96 border-t border-gray-100" : "max-h-0"}`}>
         <ul className="bg-white py-2 px-4">
           {navLinks.map((link) => {
