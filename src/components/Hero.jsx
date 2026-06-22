@@ -50,7 +50,7 @@ const Hero = () => {
             index === currentSlide ? "opacity-100 z-0" : "opacity-0 z-0"
           }`}
         >
-      
+          {/* Deep slate overlay matching the exact picture color */}
           <div className="absolute inset-0 bg-[#282b30]/90 z-10" />
           <img
             src={slide.bg}
@@ -61,7 +61,7 @@ const Hero = () => {
         </div>
       ))}
 
-
+      {/* SVG Left Arrow (Matching exact style from image) */}
       <button
         onClick={goPrev}
         className="absolute left-4 sm:left-10 top-1/2 -translate-y-1/2 z-20 text-white hover:text-teal-400 transition-colors duration-200 cursor-pointer p-2 md:p-4"
@@ -72,7 +72,7 @@ const Hero = () => {
         </svg>
       </button>
 
-     
+      {/* SVG Right Arrow (Matching exact style from image) */}
       <button
         onClick={goNext}
         className="absolute right-4 sm:right-10 top-1/2 -translate-y-1/2 z-20 text-white hover:text-teal-400 transition-colors duration-200 cursor-pointer p-2 md:p-4"
@@ -102,6 +102,16 @@ const Hero = () => {
         <p className="text-white/80 font-mono text-xs sm:text-sm md:text-[15px] max-w-2xl mx-auto leading-[2.2] tracking-wider whitespace-pre-line drop-shadow-sm">
           {slides[currentSlide].sub}
         </p>
+
+        {/* Learn More Button */}
+        <a
+          href="#portfolio"
+          className="inline-block bg-teal-500 hover:bg-teal-400 transform -skew-x-[20deg] transition-colors duration-300 shadow-sm mt-10"
+        >
+          <span className="block transform skew-x-[20deg] text-white font-mono font-bold py-3 md:py-4 px-8 md:px-12 tracking-widest text-xs md:text-sm uppercase">
+            Learn More
+          </span>
+        </a>
       </div>
     </section>
   );
