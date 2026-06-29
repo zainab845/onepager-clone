@@ -112,6 +112,7 @@ const AdminDashboard = () => {
                 <option value="team">Team Section</option>
                 <option value="client">Client Logo (About Page)</option>  
                 <option value="stat">Company Stat (About Page)</option>
+                <option value="blog">Blog Article</option>
               </select>
             </div>
 
