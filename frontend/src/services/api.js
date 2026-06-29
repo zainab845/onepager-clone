@@ -4,10 +4,9 @@ import axios from 'axios';
 // Vite by-default 'import.meta.env.DEV' ko Localhost par TRUE rakhta hai 
 // aur Vercel Cloud par FALSE kar deta hai.
 
-const PROD_BACKEND_URL = import.meta.env.VITE_API_BASE_URL || 'https://onepager-backend.vercel.app/api'; 
 const LOCAL_BACKEND_URL = 'http://localhost:5000/api';
 
-const API_URL = import.meta.env.DEV ? LOCAL_BACKEND_URL : PROD_BACKEND_URL;
+const API_URL = import.meta.env.DEV ? LOCAL_BACKEND_URL : '/api';
 
 console.log("🔌 Current API Target:", API_URL); // <-- Console par confirm dikhega
 
