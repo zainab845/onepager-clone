@@ -1,25 +1,13 @@
 import { useState, useEffect } from "react";
+// 🎯 Hamari central API service
+import { fetchSections } from "../services/api";
 
-const teamMembers = [
+// STATIC FALLBACK (Agar database khali ho toh slider khali nahi dikhega)
+const fallbackTeam = [
   {
     name: "Owen Miller",
     role: "Developer",
     img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=400",
-  },
-  {
-    name: "Mike William",
-    role: "Developer",
-    img: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=400",
-  },
-  {
-    name: "Besim Dauti",
-    role: "Developer",
-    img: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=400",
-  },
-  {
-    name: "Faton Avdiu",
-    role: "Developer",
-    img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400",
   },
   {
     name: "Sarah Connor",
@@ -30,35 +18,62 @@ const teamMembers = [
     name: "John Doe",
     role: "Manager",
     img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=400",
-  },
+  }
 ];
 
 const socialLinks = ["f", "t", "in", "g+"];
 
+// Helper: Database card ko Team Member object mein convert karne ke liye
+const formatTeamMember = (item) => {
+  return {
+    id: item._id,
+    name: item.title || "Team Member",
+    role: item.description || "Specialist",
+    img: item.imageUrl
+  };
+};
+
 const Team = () => {
+  const [members, setMembers] = useState(fallbackTeam);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerView, setItemsPerView] = useState(4);
 
-  // Dynamically update items per view based on screen size for responsive sliding
+  // 1. Fetch Dynamic Team Data
+  useEffect(() => {
+    const loadTeam = async () => {
+      try {
+        const data = await fetchSections('team');
+        if (data && data.length > 0) {
+          const formatted = data.map(formatTeamMember);
+          setMembers(formatted);
+        }
+      } catch (err) {
+        console.error("Team live fetch failed, using fallback:", err);
+      }
+    };
+    loadTeam();
+  }, []);
+
+  // Dynamically update items per view based on screen size
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 640) {
-        setItemsPerView(1); // Mobile: 1 card
+        setItemsPerView(1); 
       } else if (window.innerWidth < 1024) {
-        setItemsPerView(2); // Tablet: 2 cards
+        setItemsPerView(2); 
       } else {
-        setItemsPerView(4); // Desktop: 4 cards
+        setItemsPerView(4); 
       }
     };
     
-    handleResize(); // Trigger once on mount
+    handleResize(); 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const maxIndex = Math.max(0, teamMembers.length - itemsPerView);
+  // Math updated to depend on dynamic `members.length`
+  const maxIndex = Math.max(0, members.length - itemsPerView);
 
-  // Safety check: if screen resizes and current index is now out of bounds, reset it
   useEffect(() => {
     if (currentIndex > maxIndex) {
       setCurrentIndex(maxIndex);
@@ -69,7 +84,7 @@ const Team = () => {
   const handleNext = () => setCurrentIndex((prev) => Math.min(maxIndex, prev + 1));
 
   return (
-    <section id="team" className="py-16 md:py-20 text-center relative overflow-hidden">
+    <section id="team" className="py-16 md:py-20 text-center relative overflow-hidden font-sans select-none">
       
       {/* Blurred Background Image Layer */}
       <div className="absolute inset-0 z-0 overflow-hidden">
@@ -78,11 +93,10 @@ const Team = () => {
           alt="City Background" 
           className="w-full h-full object-cover blur-sm scale-105"
         />
-        {/* Dark overlay to make the text readable */}
         <div className="absolute inset-0 bg-slate-900/80"></div>
       </div>
 
-      {/* Side Arrows (Absolutely positioned to the edges of the section) */}
+      {/* Side Arrows */}
       <button
         onClick={handlePrev}
         disabled={currentIndex === 0}
@@ -125,15 +139,15 @@ const Team = () => {
             className="flex transition-transform duration-500 ease-in-out -mx-3"
             style={{ transform: `translateX(-${currentIndex * (100 / itemsPerView)}%)` }}
           >
-            {teamMembers.map((member, index) => (
+            {members.map((member, index) => (
               <div
-                key={`${member.name}-${index}`}
+                key={member.id || index}
                 className="w-full sm:w-1/2 lg:w-1/4 flex-shrink-0 px-3"
               >
-                <div className="flex flex-col text-left hover:-translate-y-2 transition-transform duration-300 shadow-lg overflow-hidden bg-slate-900 h-full">
+                <div className="flex flex-col text-left hover:-translate-y-2 transition-transform duration-300 shadow-lg overflow-hidden bg-slate-900 h-full rounded">
                   
                   {/* Headshot */}
-                  <div className="w-full aspect-square overflow-hidden bg-slate-600">
+                  <div className="w-full aspect-square overflow-hidden bg-slate-800">
                     <img
                       src={member.img}
                       alt={member.name}
@@ -144,7 +158,7 @@ const Team = () => {
 
                   {/* Name / Role */}
                   <div className="bg-slate-900 px-5 py-5">
-                    <h3 className="font-serif font-bold text-white text-lg mb-1 truncate">
+                    <h3 className="font-serif font-bold text-white text-lg mb-1 truncate uppercase">
                       {member.name}
                     </h3>
                     <p className="font-mono text-slate-500 text-[10px] tracking-widest uppercase">
@@ -172,7 +186,7 @@ const Team = () => {
           </div>
         </div>
 
-        {/* Mobile controls (Only visible on small screens where side arrows are hidden) */}
+        {/* Mobile controls */}
         <div className="flex justify-center gap-4 mt-8 md:hidden">
           <button
             onClick={handlePrev}
