@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
+// 🎯 Hamari central API service
+import { fetchSections } from "../services/api";
 
-const slides = [
+// STATIC FALLBACK (Agar database khali ho toh ye chalega)
+const fallbackSlides = [
   {
     bg: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1920",
     titlePre: "WELCOME TO ",
@@ -14,33 +17,78 @@ const slides = [
     titleTeal: "GREAT",
     titlePost: "COMPANY",
     sub: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore.",
-  },
-  {
-    bg:  "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1920",
-    titlePre: "ONEPAGER ",
-    titleTeal: "IS ",
-    titlePost: "VERY SUITABLE",
-    sub: "Duis aute irure dolor in reprehenderit in voluptate velit esse, consectetur adipisicing elit, sed do eiusmod.",
-  },
+  }
 ];
 
+// Helper: Admin ke single title ko 3 hisson mein todne ke liye
+const formatDynamicSlide = (dbItem) => {
+  const words = dbItem.title ? dbItem.title.trim().split(" ") : ["WELCOME", "TO", "ONEPAGER"];
+  
+  let titlePre = "";
+  let titleTeal = "";
+  let titlePost = "";
+
+  if (words.length === 1) {
+    titleTeal = words[0];
+  } else if (words.length === 2) {
+    titlePre = words[0] + " ";
+    titleTeal = words[1];
+  } else {
+    titlePre = words[0] + " ";
+    titleTeal = words[1] + " ";
+    titlePost = words.slice(2).join(" ");
+  }
+
+  return {
+    bg: dbItem.imageUrl,
+    titlePre,
+    titleTeal,
+    titlePost,
+    sub: dbItem.description || ""
+  };
+};
+
 const Hero = () => {
+  const [slides, setSlides] = useState(fallbackSlides);
   const [currentSlide, setCurrentSlide] = useState(0);
 
+  // 1. Backend se Hero Slides mangwana
+  useEffect(() => {
+    const loadHeroSlides = async () => {
+      try {
+        // Hum 'hero' tag walay cards dhoond rahe hain
+        const data = await fetchSections('hero');
+        
+        if (data && data.length > 0) {
+          const formatted = data.map(formatDynamicSlide);
+          setSlides(formatted);
+        }
+      } catch (err) {
+        console.error("Hero dynamic fetch failed, using fallback:", err);
+      }
+    };
+
+    loadHeroSlides();
+  }, []);
+
+  // 2. Auto-slide Timer (Dependent on dynamic slides array)
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [slides]);
 
   const goPrev = () => setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
   const goNext = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
 
+  // Safety check in case array gets corrupted
+  const activeSlide = slides[currentSlide] || fallbackSlides[0];
+
   return (
     <section
       id="home"
-      className="bg-[#282b30] text-white h-screen w-full flex flex-col justify-center items-center relative overflow-hidden"
+      className="bg-[#282b30] text-white h-screen w-full flex flex-col justify-center items-center relative overflow-hidden select-none font-sans"
     >
       {/* Background Slides */}
       {slides.map((slide, index) => (
@@ -50,7 +98,6 @@ const Hero = () => {
             index === currentSlide ? "opacity-100 z-0" : "opacity-0 z-0"
           }`}
         >
-          {/* Deep slate overlay matching the exact picture color */}
           <div className="absolute inset-0 bg-[#282b30]/90 z-10" />
           <img
             src={slide.bg}
@@ -61,7 +108,7 @@ const Hero = () => {
         </div>
       ))}
 
-      {/* SVG Left Arrow - Pushed closer to the edge on mobile */}
+      {/* SVG Left Arrow */}
       <button
         onClick={goPrev}
         className="absolute left-1 sm:left-10 top-1/2 -translate-y-1/2 z-20 text-white hover:text-teal-400 transition-colors duration-200 cursor-pointer p-1 md:p-4"
@@ -72,7 +119,7 @@ const Hero = () => {
         </svg>
       </button>
 
-      {/* SVG Right Arrow - Pushed closer to the edge on mobile */}
+      {/* SVG Right Arrow */}
       <button
         onClick={goNext}
         className="absolute right-1 sm:right-10 top-1/2 -translate-y-1/2 z-20 text-white hover:text-teal-400 transition-colors duration-200 cursor-pointer p-1 md:p-4"
@@ -83,30 +130,27 @@ const Hero = () => {
         </svg>
       </button>
 
-      {/* Text Content - Increased side padding (px-16) so text avoids arrows on mobile */}
+      {/* Text Content */}
       <div className="z-10 text-center px-16 sm:px-24 max-w-5xl mx-auto w-full">
-        {/* Title allows natural wrapping now */}
         <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[44px] tracking-widest mb-6 uppercase leading-tight md:leading-tight">
           <span className="font-serif font-bold text-white drop-shadow-md">
-            {slides[currentSlide].titlePre}
+            {activeSlide.titlePre}
           </span>
           <span className="font-serif font-bold text-teal-500 drop-shadow-md">
-            {slides[currentSlide].titleTeal}
+            {activeSlide.titleTeal}
           </span>
           <span className="font-mono font-normal text-white tracking-[0.15em] drop-shadow-md">
-            {slides[currentSlide].titlePost}
+            {activeSlide.titlePost}
           </span>
         </h1>
         
-        {/* Sub headline with exact spacing and breaks */}
         <p className="text-white/80 font-mono text-xs sm:text-sm md:text-[15px] max-w-2xl mx-auto leading-[2.2] tracking-wider whitespace-pre-line drop-shadow-sm">
-          {slides[currentSlide].sub}
+          {activeSlide.sub}
         </p>
 
-        {/* Learn More Button */}
         <a
           href="#portfolio"
-          className="inline-block bg-teal-500 hover:bg-teal-400 transform -skew-x-[20deg] transition-colors duration-300 shadow-sm mt-10"
+          className="inline-block bg-teal-500 hover:bg-teal-400 transform -skew-x-[20deg] transition-colors duration-300 shadow-sm mt-10 cursor-pointer"
         >
           <span className="block transform skew-x-[20deg] text-white font-mono font-bold py-3 md:py-4 px-8 md:px-12 tracking-widest text-xs md:text-sm uppercase">
             Learn More

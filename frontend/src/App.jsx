@@ -7,6 +7,7 @@ import Team from './components/Team'
 import About from './components/About'
 import Blog from './components/Blog'
 import Contact from './components/Contact'
+import AdminDashboard from './components/AdminDashboard'
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="about" element={<About />} />
           <Route path="blog" element={<Blog />} />
           <Route path="contact" element={<Contact />} />
+          <Route path="admin" element={<AdminDashboard />} />
         </Route>
       </Routes>
     </BrowserRouter>
