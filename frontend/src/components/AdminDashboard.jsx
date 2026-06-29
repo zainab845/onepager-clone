@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-// 🎯 Hamari nayi Service Layer se imports
 import { fetchSections, createSection, removeSection } from '../services/api';
 
 const AdminDashboard = () => {
@@ -111,6 +110,8 @@ const AdminDashboard = () => {
                 <option value="services">Services Section</option>
                 <option value="portfolio">Portfolio Section</option>
                 <option value="team">Team Section</option>
+                <option value="client">Client Logo (About Page)</option>  
+                <option value="stat">Company Stat (About Page)</option>
               </select>
             </div>
 
