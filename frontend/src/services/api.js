@@ -8,7 +8,7 @@ const LOCAL_BACKEND_URL = 'http://localhost:5000/api';
 
 const API_URL = import.meta.env.DEV ? LOCAL_BACKEND_URL : '/api';
 
-console.log("🔌 Current API Target:", API_URL); // <-- Console par confirm dikhega
+console.log("🔌 Current API Target:", API_URL);
 
 const api = axios.create({
   baseURL: API_URL, 
