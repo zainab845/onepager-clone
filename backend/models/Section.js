@@ -16,7 +16,7 @@ const sectionSchema = new mongoose.Schema({
   },
   imageUrl: {
     type: String,
-    required: true,
+    // required: true,
   }
 }, { timestamps: true });
 

@@ -107,6 +107,7 @@ const AdminDashboard = () => {
                 value={formData.sectionType}
                 onChange={(e) => setFormData({...formData, sectionType: e.target.value})}
               >
+                <option value="hero">Hero Slider</option>
                 <option value="services">Services Section</option>
                 <option value="portfolio">Portfolio Section</option>
                 <option value="team">Team Section</option>
